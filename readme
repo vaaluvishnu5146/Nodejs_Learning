@@ -1,3 +1,8 @@
 Creating Node JS project:
 
 1. Run 'npm init'
+2. Create .env file and paste below:
+MONGODB_URI = {{YOUR_URL}}
+NODE_ENV = production
+PORT = 3000
+HOSTNAME = 0.0.0.0
