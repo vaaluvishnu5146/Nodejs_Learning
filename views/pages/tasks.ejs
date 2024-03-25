@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/header'); %>
+  <body>
+    <div class="row">
+      <div class="row">
+        <div class="input-field col s6">
+          <input
+            placeholder="Enter Task Name"
+            id="name"
+            type="text"
+            class="validate"
+          />
+          <label for="name">Task Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s6">
+          <input
+            placeholder="category"
+            id="category"
+            type="text"
+            class="validate"
+          />
+          <label for="category">Task Category</label>
+        </div>
+      </div>
+      <button class="waves-effect waves-light btn" id="submitTask">
+        Submit
+      </button>
+    </div>
+    <script>
+      const submitButton = document.getElementById("submitTask");
+      const CREATE_TASK_PATH = `${window.location.origin}/api/task/create`;
+      submitButton.addEventListener("click", submitTask);
+
+      function submitTask(e) {
+        e.preventDefault();
+        const name = document.getElementById("name");
+        const category = document.getElementById("category");
+
+        if (name && category) {
+          fetch(CREATE_TASK_PATH, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              name: name.value,
+              category: category.value,
+            }),
+          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((result) => {
+              if (name && category) {
+                name.value = "";
+                category.value = "";
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          alert("Missing data");
+        }
+      }
+    </script>
+    <%- include('../partials/footer'); %>
+  </body>
+</html>
