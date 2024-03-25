@@ -53,6 +53,33 @@ TaskRouter.get("/", async (req, res, next) => {
   }
 });
 
+TaskRouter.get("/:id", async (req, res, next) => {
+  try {
+    const response = await TaskModel.find({ _id: req.params.id }).select({
+      __v: 0,
+    });
+    if (response.length > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Task fetched successfully",
+        data: response,
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: "No Task Found",
+        data: response,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error,
+      message: "Internal server Error",
+    });
+  }
+});
+
 TaskRouter.post("/create", async (req, res, next) => {
   const NewTask = new TaskModel(req.body);
   try {
