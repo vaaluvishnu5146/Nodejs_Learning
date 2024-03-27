@@ -7,23 +7,6 @@ function recordsToSkip(page, limit) {
 }
 
 TaskRouter.get("/", async (req, res, next) => {
-  //   TaskModel.find()
-  //     .then((response) => {
-  //       if (response) {
-  //         res.status(200).json({
-  //           success: true,
-  //           message: "Tasks fetched successfully",
-  //           data: response,
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       res.status(500).json({
-  //         success: false,
-  //         error: err,
-  //         message: "Internal server Error",
-  //       });
-  //     });
   try {
     const response = await TaskModel.find()
       .limit(Number(req.query.limit) || 5)
@@ -38,6 +21,7 @@ TaskRouter.get("/", async (req, res, next) => {
         page: req.query.page || 1,
       });
     } else {
+      res.cookie("1h", "Task Cookie", "/");
       return res.status(200).json({
         success: true,
         message: "No Task Found",

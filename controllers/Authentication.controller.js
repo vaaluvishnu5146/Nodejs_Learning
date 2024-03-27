@@ -1,6 +1,7 @@
 const AuthRouter = require("express").Router();
 const UserModel = require("../model/User.model");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
@@ -57,6 +58,16 @@ AuthRouter.post("/login", async (req, res, next) => {
       const saved_User = await UserModel.findOne({ email: req.body.email });
       if (saved_User && saved_User._id) {
         if (bcrypt.compareSync(req.body.password, saved_User.password)) {
+          const JWT_TOKEN = jwt.sign(
+            { uid: saved_User._id },
+            process.env.JWT_SECRET_KEY,
+            {
+              expiresIn: 60 * 2,
+              issuer: "APP_SERVER",
+              subject: "Token for session",
+            }
+          );
+          res.cookie("1h", JWT_TOKEN, "/");
           return res.status(200).json({
             success: true,
             message: "Login successful",
